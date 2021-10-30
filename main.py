@@ -2,7 +2,7 @@ import discord
 import os
 from replit import db
 import random
-from keep_alive import keep_alive
+#from keep_alive import keep_alive
 from datetime import datetime
 import cryptocompare
 import requests
@@ -1063,6 +1063,6 @@ async def on_message(message):
       else:
         await channelServer.send("Nesupratau komandos. Parašykite !r help, kad sužinoti visas komandas.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif")
 
-keep_alive()
+#keep_alive()
 client.run(os.getenv('TOKEN??'))
 cryptocompare.cryptocompare._set_api_key_parameter(os.getenv('TOKEN2'))
