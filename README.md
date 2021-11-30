@@ -4,6 +4,8 @@ This is a discord.py bot with its own economy using repl.it database.
 
 **The code for this bot is written in English/Lithuanian and commands are solely in Lithuanian.**
 
+This bot has been in development since March 2021.
+
 Features of this bot include: 
 
 * Coinflip 
