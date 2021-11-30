@@ -55,7 +55,7 @@ async def on_message(message):
   if client.user.mentioned_in(message) and str(message.channel.id) == str(channelServer.id):
     await message.reply("Kas yra")
 
-  elif message.content.lower().startswith("!r slots help"):
+  elif message.content.lower().startswith("!r slots help") and str(message.channel.id) == str(channelServer.id):
     await others.slotsHelp(channelServer)
 
   elif message.content.lower().startswith("!r slots check") and str(message.channel.id) == str(channelServer.id):
