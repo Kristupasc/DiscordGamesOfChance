@@ -12,6 +12,7 @@ Features of this bot include:
 * Sending money
 * Slots with multiple rewards
 * leaderboard for money and slot wins
+* Easily adding people into the database
 * Daily system that lets people get a random amount of money each day
 * The ability to buy and sell cryptocurrency (currently only supports DOGE)
 * Weekly event that generates a pool of all lost money and gives it back to one random participant who bought a ticket (disabled due to balancing reasons)
