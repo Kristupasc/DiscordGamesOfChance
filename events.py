@@ -162,6 +162,10 @@ async def salysStatyt(message, channelServer):
       ticket = db[i][4]
       wins = db[i][5]
       salys = db[i][6]
+      for j in salys:
+        if salys[j] != 0 and j != split_parts[3]:
+          await channelServer.send("<@%s>, tu jau esi pastatęs ant šalies." % message.author.id)
+          return
       salys[split_parts[3]] += int(split_parts[4])
       del db[i]
       db[i] = id, money - int(split_parts[4]), day, doge, ticket, wins, salys
@@ -181,7 +185,7 @@ async def salysPatikrintiStatymus(message, channelServer):
   if zinute == '':
     await channelServer.send("<@%s>, šiandien nesi pastatęs ant jokių šalių."% message.author.id)
   else:
-    await channelServer.send("<@%s>, štai tavo šalys, ant kurių esi pastatęs: \n"% message.author.id + zinute)
+    await channelServer.send("<@%s>, štai tavo šalis, ant kurios esi pastatęs: \n"% message.author.id + zinute)
 
 async def paroSalis(channelServer):
   zinute = "šios savaitės šalys: \n"
@@ -200,9 +204,9 @@ async def salysBaigt(client, channelServer):
       if len(db[i]) >= 7:
         if db[i][6][saliesPav] > 0:
           user = await client.fetch_user(db[i][0])
-          zinute += user.name + ": " + str(db[i][6][saliesPav]*4) + " pinigų.\n"
+          zinute += user.name + ": " + str(db[i][6][saliesPav]*5) + " pinigų.\n"
           id = db[i][0]
-          money = db[i][1] + int(db[i][6][saliesPav]*4)
+          money = db[i][1] + int(db[i][6][saliesPav]*5)
           day = db[i][2]
           doge = db[i][3]
           ticket = db[i][4]
@@ -219,4 +223,4 @@ async def salysBaigt(client, channelServer):
     await channelServer.send(zinute)
 
 async def salysHelp(channelServer):
-  await channelServer.send("Kiekvieną pirmadieni, trečiadienį bei šeštadienį bus galimybė statyti ant išrinktų šalių. Dienos pradžioje bus išrenkamos šešios Europos šalys ant kurių tą dieną bus galima statyti pinigus. Dienos gale bus išrenkama viena šalis iš šešių. Jeigu dalyvis buvo pastatęs pinigus ant tos šalies, jis atgaus ``pastatytą sumą * 4``\nKomandų sąrašas:\n``!r šalys`` parodys šešias tos dienos šalis.\n``!r mano šalys`` parodys ant kokių šalių esi pastatęs šiandien.\n``!r šalys statyti [šalies_pavadinimas] [suma]`` pastatys paskirtą sumą ant tos šalies.")
+  await channelServer.send("Kiekvieną pirmadieni, trečiadienį bei šeštadienį bus galimybė statyti ant išrinktų šalių. Dienos pradžioje bus išrenkamos šešios Europos šalys ant kurių tą dieną bus galima statyti pinigus. Dienos gale bus išrenkama viena šalis iš šešių. Jeigu dalyvis buvo pastatęs pinigus ant tos šalies, jis atgaus ``pastatytą sumą * 5``\nKomandų sąrašas:\n``!r šalys`` parodys šešias tos dienos šalis.\n``!r mano šalys`` parodys ant kokių šalių esi pastatęs šiandien.\n``!r šalys statyti [šalies_pavadinimas] [suma]`` pastatys paskirtą sumą ant tos šalies.")

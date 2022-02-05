@@ -66,7 +66,7 @@ async def daily(message, channelServer):
     elif num >= 96 and num <= 101:
         money = 30000
     searchedSalys = db[searchedID][6]
-    if(now.weekday() == 4):
+    if(now.weekday() == 4 or (now.hour >= 22 and now.weekday() == 3)):
       money = money * 10
     del db[searchedID]
     db[searchedID] = message.author.id, searchedMoney + money, now.day, searchedDoge, Ticket, searchedWins, searchedSalys
@@ -87,6 +87,8 @@ async def daily(message, channelServer):
         money = 4000
     elif num >= 96 and num <= 101:
         money = 30000
+    if(now.weekday() == 4 or (now.hour >= 22 and now.weekday() == 3)):
+      money = money * 10
     searchedSalys = db[searchedID][6]
     del db[searchedID]
     db[searchedID] = message.author.id, searchedMoney + money, now.day + 1, searchedDoge, Ticket, searchedWins, searchedSalys
