@@ -7,28 +7,28 @@ def pridetBankui(bet):
   diena = db['bankas'][1]
   isStarted = db['bankas'][2]
   isEnded = db['bankas'][3]
-  #if bet >= 10000 and bet <= 1000000:
-  #  bet = bet / 10000
-  #  percent = (-0.0025 * (bet**2)) - (0.2 * bet) + 70
-  #  bet = bet * 10000
-  #  bet = (bet * percent) / 100
-  #elif bet < 10000 and bet != 500:
-  #  bet = (bet * 70) / 100
-  #elif bet == 500:
-  #  bet = (bet * 40) / 100
-  #else:
-  #  bet = (bet * 25) / 100
-  bet = (bet * 25) / 100
+  if bet >= 10000 and bet <= 1000000:
+   bet = bet / 10000
+   percent = (-0.0025 * (bet**2)) - (0.2 * bet) + 60
+   bet = bet * 10000
+   bet = (bet * percent) / 100
+  elif bet < 10000 and bet != 500:
+   bet = (bet * 60) / 100
+  elif bet == 500:
+   bet = (bet * 40) / 100
+  else:
+   bet = (bet * 25) / 100
+  bet = (bet * 40) / 100
   pinigai += bet
   del db['bankas']
   db['bankas'] = pinigai, diena, isStarted, isEnded
 
-def paimtIsBanko(bet):
-  print("keisk")
-  #pinigai = db['bankas']
-  #pinigai -= bet
-  #del db['bankas']
-  #db['bankas'] = pinigai
+# def paimtIsBanko(bet):
+#   print("keisk")
+#   pinigai = db['bankas']
+#   pinigai -= bet
+#   del db['bankas']
+#   db['bankas'] = pinigai
 
 def pradetiBanka():
   diena = db['bankas'][1]

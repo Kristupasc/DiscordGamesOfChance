@@ -1,4 +1,4 @@
-import discord, os, cryptocompare, requests
+import discord, os, cryptocompare, requests, random
 from replit import db
 from keep_alive import keep_alive
 from datetime import datetime
@@ -11,7 +11,11 @@ try:
 except:
     print("No rate limit")
 
-client = discord.Client()
+servers = [846826501865603092, 515932305689411594]
+intents = discord.Intents.default()
+#intents.message_content = True
+client = discord.Client(intents=intents)
+#client = discord.Bot(intents=intents)
 DOGE = cryptocompare.get_price('DOGE', currency='EUR', full=False) # rad
 DogeEur = DOGE["DOGE"]["EUR"]
 db[9871] = -1
@@ -21,12 +25,25 @@ newMoney = 0
 now = datetime.now()
 print("Current day: " + str(now.day))
 
+# a database for the puzzle. Structure:
+# isRunning: boolean, answer: int, lastPuzzle: int, correctAnswers (ids of accounts who answered correctly): Array
+db['puzzle'] = False, 0, -1, []
+
 
 @client.event
 async def on_ready():
+  #await events.puzzleStart(client)
+  # searchedID = otherHelpers.get_spot(337336281782550530)
+  # searchedDoge = int(db[searchedID][3])
+  # Ticket = int(db[searchedID][4])
+  # searchedDay = int(db[searchedID][2])
+  # searchedSalys = db[searchedID][6]
+  # searchedMoney = int(db[searchedID][1])
+  # searchedWins = db[searchedID][5]
+  # searchedWins["DIAMOND"] = 2
+  # del db[searchedID]
+  # db[searchedID] = 337336281782550530, searchedMoney, searchedDay, searchedDoge, Ticket, searchedWins, searchedSalys
   print("Bot is logged in as {0.user}".format(client))
-  
-  #db[0] = 211832708530307082, 309000, 8, 0, 0, {'CHERRIES': 79, 'SEVEN': 17, 'DIAMOND': 0, 'GRAPE': 75, 'WATERMELON': 14, 'BELL': 15}, {'Norvegija': 0, 'Švedija': 0, 'Suomija': 0, 'Danija': 0, 'Estija': 0, 'Latvija': 0, 'Lietuva': 0, 'Lenkija': 100000, 'Vokietija': 0, 'Nyderlandai': 0, 'Belgija': 0, 'Liuksemburgas': 250000, 'Prancūzija': 0, 'Ispanija': 0, 'Portugalija': 0, 'Italija': 0, 'Čekija': 100000, 'Austrija': 0, 'Slovakija': 0, 'Vengrija': 0, 'Slovėnija': 0, 'Šveicarija': 0, 'Kroatija': 0, 'Graikija': 0, 'Rumunija': 0, 'Bulgarija': 0, 'Kipras': 0, 'Malta': 0, 'Juodkalnija': 0, 'Airija': 0, 'Islandija': 0}
   #otherHelpers.printOutAllDatabase()
   #otherHelpers.updatintDatabase()
 
@@ -36,7 +53,6 @@ async def on_message(message):
   channelServer = client.get_channel(825306731814846465)
   if message.author == client.user:
     return
-
   if now.weekday() == 1 and message.author.id == 699945002406510692:
     await taxes.taxes(channelServer, client, now, message)
 
@@ -46,16 +62,23 @@ async def on_message(message):
   if (now.weekday() == 0 or now.weekday() == 2 or now.weekday() == 5) and db['dailySalys'] != [] and message.author.id == 699945002406510692 and now.hour == 20:
     await events.salysBaigt(client, channelServer)
 
-  #if now.weekday() == 0 and db["bankas"][2] == False:
-    #await events.eventStart(now, client, discord)
+  if now.weekday() == 0 and db["bankas"][2] == False:
+    await events.eventStart(now, client, discord)
 
-  #if now.weekday() == 6 and db["bankas"][2] == True and message.author.id == 699945002406510692:
-    #await events.eventEnd(now, client, discord, channelServer)
+  if now.weekday() == 6 and db["bankas"][2] == True and message.author.id == 699945002406510692:
+    await events.eventEnd(now, client, discord, channelServer)
+
+  # if message.author.id == 699945002406510692 and db["puzzle"][0] == False:
+  #   await events.puzzleStart(client)
   
   if client.user.mentioned_in(message) and str(message.channel.id) == str(channelServer.id):
-    await message.reply("Kas yra")
+    r = random.randint(0, 1)
+    if r == 0:
+      await message.reply("Kas yra")
+    elif r == 1:
+      await message.reply("Ok")
 
-  elif message.content.lower().startswith("!r slots help") and str(message.channel.id) == str(channelServer.id):
+  if message.content.lower().startswith("!r slots help") and str(message.channel.id) == str(channelServer.id):
     await others.slotsHelp(channelServer)
 
   elif message.content.lower().startswith("!r slots check") and str(message.channel.id) == str(channelServer.id):
@@ -85,9 +108,6 @@ async def on_message(message):
   elif message.content.lower().startswith("agrastas") and str(message.channel.id) == str(channelServer.id):
     await channelServer.send("norėtum")
 
-  elif message.content.lower().startswith("!r patchnotes") and str(message.channel.id) == str(channelServer.id):
-    await others.patchNotes(channelServer, client)
-
   elif message.content.lower().startswith("!r help") and str(message.channel.id) == str(channelServer.id):
     await others.help(channelServer)
 
@@ -112,17 +132,23 @@ async def on_message(message):
     else:
       await channelServer.send("Šiandien ant šalių statyti negalima. Statymai veikia tik pirmadieniais, trečiadieniais ir šeštadieniais.")
 
-  #elif message.content.lower().startswith("!r event") and str(message.channel.id) == str(channelServer.id):
-    #await events.event(channelServer)
+  elif message.content.lower().startswith("!r event pool") and str(message.channel.id) == str(channelServer.id):
+    await events.eventPool(channelServer)
+  
+  elif message.content.lower().startswith("!r event help") and str(message.channel.id) == str(channelServer.id):
+    await others.eventHelp(channelServer)
+  
+  elif message.content.lower().startswith("!r event") and str(message.channel.id) == str(channelServer.id):
+    await events.event(channelServer)
 
-  #elif message.content.lower().startswith("!r ticket buy") and str(message.channel.id) == str(channelServer.id):
-    #await events.ticketBuy(channelServer, message)
+  elif message.content.lower().startswith("!r ticket buy") and str(message.channel.id) == str(channelServer.id):
+    await events.ticketBuy(channelServer, message)
     
   elif message.content.lower().startswith("!r give") and str(message.channel.id) == str(channelServer.id):
     await transactions.give(message, channelServer)
 
-  #elif message.content.lower().startswith("!r tickets") and str(message.channel.id) == str(channelServer.id):
-    #await events.tickets(client, channelServer)
+  elif message.content.lower().startswith("!r tickets") and str(message.channel.id) == str(channelServer.id):
+    await events.tickets(client, channelServer)
 
   elif message.content.lower().startswith("!r balance") and str(message.channel.id) == str(channelServer.id):
     await playersEconomy.balance(message, channelServer)
@@ -162,6 +188,15 @@ async def on_message(message):
 
       else:
         await channelServer.send("Nesupratau komandos. Parašykite !r help, kad sužinoti visas komandas.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif")
+
+
+#@client.slash_command(description="Monetos metimas")
+#async def coinflip(
+    #ctx: discord.ApplicationContext,
+    #pasirinkimas: Option(str, choices=["herbas", "skaičius"]),
+    #suma: Option(str, "statoma suma") 
+#):
+  #await ctx.respond("dar neveikia lol")
 
 keep_alive()
 client.run(os.getenv('TOKEN??'))

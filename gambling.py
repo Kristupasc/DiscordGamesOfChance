@@ -8,7 +8,7 @@ async def slots(message, channelServer, client):
   results = list(resultss)
   searchedWins = db[searchedID][5]
   searchedMoney = int(db[searchedID][1])
-  if results[0] > 25000 and searchedMoney >= 5000:
+  if results[0] > 2500 and searchedMoney >= 500:
       searchedWins[results[1]] += 1
   for i in range(3):
     if results[i + 1] == "CHERRIES":
@@ -27,13 +27,13 @@ async def slots(message, channelServer, client):
   searchedDoge = int(db[searchedID][3])
   Ticket = int(db[searchedID][4])
   searchedDay = int(db[searchedID][2])
-  if searchedMoney < 5000:
+  if searchedMoney < 500:
     await channelServer.send("<@%s>, tau neužtenka pinigų.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif" % message.author.id)
   else:
-    newMoney = searchedMoney - 5000
+    newMoney = searchedMoney - 500
     newMoney += results[0]
     if results[0] == 0 and db["bankas"][2] == True:
-      bankHelper.pridetBankui(5000)
+      bankHelper.pridetBankui(500)
       pinigai = int(db["bankas"][0])
       await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
     searchedSalys = db[searchedID][6]

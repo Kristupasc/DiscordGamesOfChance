@@ -59,6 +59,23 @@ def resetintPlayeriuSalis():
       continue
   return None
 
+def resetintPlayeriuTickets():
+  for i in range(len(db.keys())):
+    try:
+      id = db[i][0]
+      money = db[i][1]
+      day = db[i][2]
+      doge = db[i][3]
+      wins = db[i][5]
+      salys = db[i][6]
+      del db[i]
+      db[i] = id, money, day, doge, 0, wins, salys
+      print("completed.")
+    except KeyError:
+      continue
+  return None
+
+
 def printOutAllDatabase():
   for i in range(len(db.keys())):
     try:

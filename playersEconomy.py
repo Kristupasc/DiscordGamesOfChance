@@ -52,47 +52,53 @@ async def daily(message, channelServer):
   if db[searchedID][2] != now.day and db[searchedID][2] != now.day + 1:
     searchedMoney = int(db[searchedID][1])
     num = random.randint(1, 101)
-    money = 1000
+    money = 5000
     if num >= 1 and num <= 30:
-        money = 1000
+        money = 5000
     elif num >= 31 and num <= 61:
-        money = 2000
+        money = 5000
     elif num >= 62 and num <= 66:
-        money = 1500
+        money = 1000
     elif num >= 67 and num <= 81:
-        money = 3000
+        money = 8000
     elif num >= 82 and num <= 95:
-        money = 4000
+        money = 10000
     elif num >= 96 and num <= 101:
-        money = 30000
+        money = 50000
     searchedSalys = db[searchedID][6]
-    if(now.weekday() == 4 or (now.hour >= 22 and now.weekday() == 3)):
+    if now.weekday() == 4:
       money = money * 10
     del db[searchedID]
     db[searchedID] = message.author.id, searchedMoney + money, now.day, searchedDoge, Ticket, searchedWins, searchedSalys
-    await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + otherHelpers.kableliai(searchedMoney + money))
+    if db["bankas"][2] == True and db[searchedID][4] != 1:
+      await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + otherHelpers.kableliai(searchedMoney + money) + "\nAr jau nusipirkai evento bilietą? Rašyk !r event dėl informacijos.")
+    else:
+      await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + otherHelpers.kableliai(searchedMoney + money))
   elif db[searchedID][2] == now.day and now.hour >= 22:
     searchedMoney = int(db[searchedID][1])
     num = random.randint(1, 101)
-    money = 1000
+    money = 5000
     if num >= 1 and num <= 30:
-        money = 1000
+        money = 5000
     elif num >= 31 and num <= 61:
-        money = 2000
+        money = 5000
     elif num >= 62 and num <= 66:
-        money = 1500
+        money = 1000
     elif num >= 67 and num <= 81:
-        money = 3000
+        money = 8000
     elif num >= 82 and num <= 95:
-        money = 4000
+        money = 10000
     elif num >= 96 and num <= 101:
-        money = 30000
-    if(now.weekday() == 4 or (now.hour >= 22 and now.weekday() == 3)):
+        money = 50000
+    if now.weekday() == 3:
       money = money * 10
     searchedSalys = db[searchedID][6]
     del db[searchedID]
     db[searchedID] = message.author.id, searchedMoney + money, now.day + 1, searchedDoge, Ticket, searchedWins, searchedSalys
-    await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + str(otherHelpers.kableliai(searchedMoney + money)))
+    if db["bankas"][2] == True and db[searchedID][4] != 1:
+      await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + otherHelpers.kableliai(searchedMoney + money) + "\nAr jau nusipirkai evento bilietą? Rašyk !r event dėl informacijos.")
+    else:
+      await channelServer.send("<@%s> priėmė savo dieninį bonusą" % message.author.id + " (" + str(money) + " pinigų).\n" +"Visa pinigų suma: " + otherHelpers.kableliai(searchedMoney + money))
   else:
     await channelServer.send("<@%s>, tavo dieninis bonusas jau buvo aktyvuotas.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif" % message.author.id)
 

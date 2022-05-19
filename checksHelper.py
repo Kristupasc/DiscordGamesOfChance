@@ -2,26 +2,26 @@ def check(slot1, slot2, slot3):
     money = 0
     if slot1 == slot2 and slot2 == slot3:
         if slot1 == "CHERRIES":
-            money = 62500
+            money = 6250
         elif slot1 == "GRAPE":
-            money = 125000
+            money = 12500
         elif slot1 == "WATERMELON":
-            money = 175000
+            money = 17500
         elif slot1 == "BELL":
-            money = 250000
+            money = 25000
         elif slot1 == "SEVEN":
-            money = 650000
+            money = 65000
         elif slot1 == "DIAMOND":
-            money = 1250000
+            money = 125000
     elif slot1 == "DIAMOND" or slot2 == "DIAMOND" or slot3 == "DIAMOND":
         if slot1 == slot2 and slot1 == "DIAMOND":
-            money = 25000
+            money = 2500
         elif slot2 == slot3 and slot2 == "DIAMOND":
-          money = 25000
+          money = 2500
         elif slot1 == slot3 and slot3 == "DIAMOND":
-          money = 25000
+          money = 2500
         else:
-          money = 7500
+          money = 750
     return money
 
 def checkForCoinflip(message, split_parts):
