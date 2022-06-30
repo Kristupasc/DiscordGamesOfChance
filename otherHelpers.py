@@ -113,20 +113,21 @@ def kableliai(suma):
 def get_spot(id):
   for i in range(len(db.keys())):
     try:
-      if id == db[i][0]:
+      if id == int(db[i][0]):
         return i
     except KeyError:
       continue
   return None
 
 def addme(message):
+  salys = {'Norvegija': 0, 'Švedija': 0, 'Suomija': 0, 'Danija': 0, 'Estija': 0, 'Latvija': 0, 'Lietuva': 0, 'Lenkija': 0, 'Vokietija': 0, 'Nyderlandai': 0, 'Belgija': 0, 'Liuksemburgas': 0, 'Prancūzija': 0, 'Ispanija': 0, 'Portugalija': 0, 'Italija': 0, 'Čekija': 0, 'Austrija': 0, 'Slovakija': 0, 'Vengrija': 0, 'Slovėnija': 0, 'Šveicarija': 0, 'Kroatija': 0, 'Graikija': 0, 'Rumunija': 0, 'Bulgarija': 0, 'Kipras': 0, 'Malta': 0, 'Juodkalnija': 0, 'Airija': 0, 'Islandija': 0}
   if db.keys() == None or db[0] == None:
-    db[0] = message.author.id, default_money, 0, 0, 0, winai
+    db[0] = message.author.id, default_money, 0, 0, 0, winai, salys
   else:
-    for i in range(len(db.keys())-5):
+    for i in range(len(db.keys())-6):
       if message.author.id == db[i][0]:
         return False
-    db[len(db.keys())-5] = message.author.id, default_money, 0, 0, 0, winai
+    db[len(db.keys())-5] = message.author.id, default_money, 0, 0, 0, winai, salys
 
 def turtingumoInspekcija():
   turtingi = []

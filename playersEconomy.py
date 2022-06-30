@@ -7,7 +7,7 @@ async def balance(message, channelServer):
   searchedID = otherHelpers.get_spot(message.author.id)
   searchedMoney = int(db[searchedID][1])
   searchedDoge = int(db[searchedID][3])
-  await channelServer.send("<@%s>, tu turi:\n" % message.author.id + otherHelpers.kableliai(searchedMoney) + " pinigų.\n" + str(searchedDoge) + " DOGE.\n")
+  await channelServer.send("<@%s>, tu turi " % message.author.id + otherHelpers.kableliai(searchedMoney) + " pinigų.\n")
 
 async def kainos(channelServer, message):
   DogeEur = otherHelpers.getDogePrice()
@@ -42,6 +42,7 @@ async def leaderboard(channelServer, client, now):
     await channelServer.send("1. " + str(zmogus1.name) + ": " + otherHelpers.kableliai(int(top[0][0])) + "\n2. " + str(zmogus2.name) + ": " + otherHelpers.kableliai(int(top[1][0])) + "\n3. " + str(zmogus3.name) + ": " + otherHelpers.kableliai(int(top[2][0])) + "\n4. " + str(zmogus4.name) + ": " + otherHelpers.kableliai(int(top[3][0])) + "\n5. " + str(zmogus5.name) + ": " + otherHelpers.kableliai(int(top[4][0])))
   else:
     await channelServer.send("Jau ši komanda buvo parašyta visai neseniai. Pabandyk vėliau!")
+  
 
 async def daily(message, channelServer):
   now = datetime.now()

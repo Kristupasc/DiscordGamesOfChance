@@ -16,7 +16,9 @@ async def eventStart(now, client, discord):
   await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
 
 async def eventEnd(now, client, discord, channelServer):
+  notificationServer = client.get_channel(983041377241821235)
   await channelServer.send("Eventas baigėsi! Laimėtojai:")
+  await notificationServer.send("Eventas baigėsi! Laimėtojai:")
   ticketai = otherHelpers.ticketboard()
   if len(ticketai) >= 3:
     ranum = random.randint(0, len(ticketai) - 1)
@@ -24,6 +26,7 @@ async def eventEnd(now, client, discord, channelServer):
     suma = db["bankas"][0]
     sempro = int((suma * 60) / 100)
     await channelServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
+    await notificationServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[ranum])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])
@@ -39,6 +42,7 @@ async def eventEnd(now, client, discord, channelServer):
     user = await client.fetch_user(ticketai[ranum2])
     trimpro = int((suma * 30) / 100)
     await channelServer.send(str(user) + " 30% visos sumos! (" + str(trimpro) + ")")
+    await notificationServer.send(str(user) + " 30% visos sumos! (" + str(trimpro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[ranum2])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])
@@ -54,6 +58,7 @@ async def eventEnd(now, client, discord, channelServer):
     user = await client.fetch_user(ticketai[ranum3])
     despro = int((suma * 10) / 100)
     await channelServer.send(str(user) + " 10% visos sumos! (" + str(despro) + ")")
+    await notificationServer.send(str(user) + " 10% visos sumos! (" + str(despro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[ranum3])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])
@@ -68,6 +73,7 @@ async def eventEnd(now, client, discord, channelServer):
     suma = db["bankas"][0]
     sempro = int((suma * 60) / 100)
     await channelServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
+    await notificationServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[ranum])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])
@@ -83,6 +89,7 @@ async def eventEnd(now, client, discord, channelServer):
     user = await client.fetch_user(ticketai[ranum2])
     trimpro = int((suma * 30) / 100)
     await channelServer.send(str(user) + " 30% visos sumos! (" + str(trimpro) + ")")
+    await notificationServer.send(str(user) + " 30% visos sumos! (" + str(trimpro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[ranum2])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])
@@ -96,6 +103,7 @@ async def eventEnd(now, client, discord, channelServer):
     suma = db["bankas"][0]
     sempro = int((suma * 60) / 100)
     await channelServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
+    await notificationServer.send(str(user) + " 60% visos sumos! (" + str(sempro) + ")")
     searchedID = otherHelpers.get_spot(ticketai[0])
     searchedMoney = int(db[searchedID][1])
     searchedDoge = int(db[searchedID][3])

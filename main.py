@@ -10,7 +10,8 @@ try:
     print(f"Rate limit {int(r.headers['Retry-After']) / 60} minutes left")
 except:
     print("No rate limit")
-
+global skaiciusSt
+skaiciusSt = 0
 servers = [846826501865603092, 515932305689411594]
 intents = discord.Intents.default()
 #intents.message_content = True
@@ -24,14 +25,13 @@ searchedMoney = 0
 newMoney = 0
 now = datetime.now()
 print("Current day: " + str(now.day))
-
 # a database for the puzzle. Structure:
 # isRunning: boolean, answer: int, lastPuzzle: int, correctAnswers (ids of accounts who answered correctly): Array
 db['puzzle'] = False, 0, -1, []
 
-
 @client.event
 async def on_ready():
+  skaiciusSt = 0
   #await events.puzzleStart(client)
   # searchedID = otherHelpers.get_spot(337336281782550530)
   # searchedDoge = int(db[searchedID][3])
@@ -49,6 +49,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  global skaiciusSt
   now = datetime.now()
   channelServer = client.get_channel(825306731814846465)
   if message.author == client.user:
@@ -62,12 +63,27 @@ async def on_message(message):
   if (now.weekday() == 0 or now.weekday() == 2 or now.weekday() == 5) and db['dailySalys'] != [] and message.author.id == 699945002406510692 and now.hour == 20:
     await events.salysBaigt(client, channelServer)
 
+  if message.author.id == 173107123490783232 and skaiciusSt == 0:
+    await message.reply("pisk nx stalinas")
+    skaiciusSt = 1
+  
   if now.weekday() == 0 and db["bankas"][2] == False:
     await events.eventStart(now, client, discord)
 
   if now.weekday() == 6 and db["bankas"][2] == True and message.author.id == 699945002406510692:
     await events.eventEnd(now, client, discord, channelServer)
 
+  if message.author.id == 211832708530307082 and message.content.lower().startswith("!r override salys pradet") and str(message.channel.id) == str(channelServer.id):
+    await message.delete()
+    if db['dailySalys'] == []:
+      await events.salysPradet(channelServer)
+
+  if message.author.id == 211832708530307082 and message.content.lower().startswith("!r override salys baigt") and str(message.channel.id) == str(channelServer.id):
+    await message.delete()
+    if db['dailySalys'] != []:
+      await events.salysBaigt(client, channelServer)
+
+    
   # if message.author.id == 699945002406510692 and db["puzzle"][0] == False:
   #   await events.puzzleStart(client)
   
@@ -83,6 +99,9 @@ async def on_message(message):
 
   elif message.content.lower().startswith("!r slots check") and str(message.channel.id) == str(channelServer.id):
     await playersEconomy.slotsCheck(message, channelServer)
+
+  elif message.content.lower().startswith("!r duoti") and str(message.channel.id) == str(channelServer.id):
+    await transactions.duoti(message, channelServer, client)
 
   elif message.content.lower().startswith("!r slots leaderboard") and str(message.channel.id) == str(channelServer.id):
     await playersEconomy.slotsLeaderboard(message, channelServer, now, client)

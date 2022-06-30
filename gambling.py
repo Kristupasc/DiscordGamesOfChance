@@ -3,12 +3,16 @@ import discord, random
 from replit import db
 
 async def slots(message, channelServer, client):
+  multiplier = 1
+  split_content = message.content.split(' ')
+  if len(split_content) >= 3 and split_content[2].lower().startswith("high"):
+    multiplier = 10
   searchedID = otherHelpers.get_spot(message.author.id)
   resultss = gamesHelper.game()
   results = list(resultss)
   searchedWins = db[searchedID][5]
   searchedMoney = int(db[searchedID][1])
-  if results[0] > 2500 and searchedMoney >= 500:
+  if results[0] > 2500 * multiplier and searchedMoney >= 500 * multiplier:
       searchedWins[results[1]] += 1
   for i in range(3):
     if results[i + 1] == "CHERRIES":
@@ -27,20 +31,20 @@ async def slots(message, channelServer, client):
   searchedDoge = int(db[searchedID][3])
   Ticket = int(db[searchedID][4])
   searchedDay = int(db[searchedID][2])
-  if searchedMoney < 500:
+  if searchedMoney < 500 * multiplier:
     await channelServer.send("<@%s>, tau neužtenka pinigų.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif" % message.author.id)
   else:
-    newMoney = searchedMoney - 500
-    newMoney += results[0]
+    newMoney = searchedMoney - (500 * multiplier)
+    newMoney += results[0] * multiplier
     if results[0] == 0 and db["bankas"][2] == True:
-      bankHelper.pridetBankui(500)
+      bankHelper.pridetBankui(500 * multiplier, False, message)
       pinigai = int(db["bankas"][0])
-      await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
+      await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
     searchedSalys = db[searchedID][6]
     del db[searchedID]
     db[searchedID] = message.author.id, newMoney, searchedDay, searchedDoge, Ticket, searchedWins, searchedSalys
     if results[0] > 0:
-      await channelServer.send(results[1] + "|" + results[2] + "|" + results[3] + "\n<@%s> laimėjo " % message.author.id + str(results[0]) + " pinigų!\nIš viso turi " + otherHelpers.kableliai(newMoney) + " pinigų.")
+      await channelServer.send(results[1] + "|" + results[2] + "|" + results[3] + "\n<@%s> laimėjo " % message.author.id + str(results[0] * multiplier) + " pinigų!\nIš viso turi " + otherHelpers.kableliai(newMoney) + " pinigų.")
     else:
       await channelServer.send(results[1] + "|" + results[2] + "|" + results[3] + "\n<@%s> pralaimėjo." % message.author.id + "\nIš viso turi " + otherHelpers.kableliai(newMoney) + " pinigų.")
 
@@ -73,9 +77,9 @@ async def coinflip(message, channelServer, split_parts, client):
           del db[searchedID]
           db[searchedID] = message.author.id, newMoney, searchedDay, searchedDoge, Ticket, searchedWins, searchedSalys
           if db["bankas"][2] == True:
-            bankHelper.pridetBankui(int(split_parts[3]))
+            bankHelper.pridetBankui(int(split_parts[3]), True, message)
             pinigai = int(db["bankas"][0])
-            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
           await channelServer.send("<@%s> " % message.author.id + zinute + "Pralaimėjo. \nIš viso turi pinigų: " + otherHelpers.kableliai(newMoney))
     else:
       await channelServer.send("Arba pinigų suma viršija jūsų balansą, arba įvestas neigiamas skaičius.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif")
@@ -102,9 +106,9 @@ async def multipleCoinflips(message, channelServer, client, split_parts):
           await channelServer.send("<@%s> Laimėjo! \n" % message.author.id + "Moneta buvo mesta " + str(split_parts[4]) + " kartų(us).\n" + split_parts[2] + " iškrito " + str(flip[0]) + " kartų(us).\nDabar turi pinigų: " + otherHelpers.kableliai(newMoney))
         elif flip[1] < 0:
           if db["bankas"][2] == True:
-            bankHelper.pridetBankui(flip[1] * -1)
+            bankHelper.pridetBankui(flip[1] * -1, False, message)
             pinigai = int(db["bankas"][0])
-            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
           await channelServer.send("<@%s> Pralaimėjo. \n" % message.author.id + "Moneta buvo mesta " + str(split_parts[4]) + " kartų(us).\n" + split_parts[2] + " iškrito " + str(flip[0]) + " kartų(us).\nDabar turi pinigų: " + otherHelpers.kableliai(newMoney))
         else:
           await channelServer.send("<@%s> Lygiosios. \n" % message.author.id + "Moneta buvo mesta " + str(split_parts[4]) + " kartų(us).\n" + split_parts[2] + " iškrito " + str(flip[0]) + " kartų(us).\nDabar turi pinigų: " + otherHelpers.kableliai(newMoney))
@@ -139,9 +143,9 @@ async def roulette(channelServer, client, message, split_parts):
           del db[searchedID]
           db[searchedID] = message.author.id, newMoney, searchedDay, searchedDoge, Ticket, searchedWins, searchedSalys
           if db["bankas"][2] == True:
-            bankHelper.pridetBankui(int(split_parts[3]))
+            bankHelper.pridetBankui(int(split_parts[3]), True, message)
             pinigai = int(db["bankas"][0])
-            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
+            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
           await channelServer.send("<@%s> Pralaimėjo. \nIš viso turi pinigų: " % message.author.id + otherHelpers.kableliai(newMoney))
     else:
       await channelServer.send("Arba pinigų suma viršija jūsų balansą, arba įvestas neigiamas skaičius.\nhttps://media.giphy.com/media/f9qYBByA7FXePMu2Km/giphy.gif")
@@ -170,9 +174,14 @@ async def number(channelServer, client, message, split_parts):
           del db[searchedID]
           db[searchedID] = message.author.id, newMoney, searchedDay, searchedDoge, Ticket, searchedWins, searchedSalys
           if db["bankas"][2] == True:
-            bankHelper.pridetBankui(prize[0] * -1)
-            pinigai = int(db["bankas"][0])
-            await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(pinigai) + " pinigų prize pool"))
+            if int(split_parts[4]) >= 16:
+              bankHelper.pridetBankui(prize[0] * -1, False, message)
+              pinigai = int(db["bankas"][0])
+              await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
+            else:
+              bankHelper.pridetBankui(prize[0] * -1, True, message)
+              pinigai = int(db["bankas"][0])
+              await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= str(otherHelpers.kableliai(pinigai)) + " pinigų prize pool"))
           await channelServer.send("<@%s> Pralaimėjo.\nSkaičius buvo: " % message.author.id + str(prize[1]) + ".\nIš viso turi pinigų: " + otherHelpers.kableliai(newMoney))
 
 async def doge(message, split_parts, channelServer, client):
